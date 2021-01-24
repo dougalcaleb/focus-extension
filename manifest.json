@@ -1,0 +1,15 @@
+{
+    "name": "MTech extension",
+    "version": "1.0",
+    "description": "Change background color",
+    "manifest_version": 2,
+    "permissions": ["storage", "declarativeContent", "activeTab"],
+    "options_page": "options.html",
+    "background": {
+        "scripts": ["javascript/background.js"],
+        "persistent": false
+    },
+    "page_action": {
+        "default_popup": "popup.html"
+    }
+}
