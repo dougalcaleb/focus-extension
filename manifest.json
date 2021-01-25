@@ -1,15 +1,28 @@
 {
-    "name": "MTech extension",
-    "version": "1.0",
-    "description": "Change background color",
-    "manifest_version": 2,
-    "permissions": ["storage", "declarativeContent", "activeTab"],
-    "options_page": "options.html",
-    "background": {
-        "scripts": ["javascript/background.js"],
-        "persistent": false
-    },
-    "page_action": {
-        "default_popup": "popup.html"
-    }
+	"name": "ProFocus",
+	"version": "0.1.0",
+	"description": "Focus better by eliminating destractions.",
+	"manifest_version": 2,
+	"permissions": ["storage", "declarativeContent", "activeTab", "tabs", "notifications"],
+	"options_page": "options.html",
+	"background": {
+		"scripts": ["javascript/background.js"],
+		"persistent": true
+	},
+   "browser_action": {
+      "default_popup": "popup.html"
+   },
+	"content_scripts": [
+		{
+			"matches": ["*://*.reddit.com/*"],
+			"js": ["javascript/reddit.js"]
+		},
+		{
+			"matches": ["*://*.youtube.com/*"],
+			"js": ["javascript/youtube.js"]
+		}
+	],
+	"icons": {
+		"128": "images/target.png"
+	}
 }
