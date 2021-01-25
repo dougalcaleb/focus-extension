@@ -1,19 +1,21 @@
+// Options
 const allowedTime = 2 * 60 * 60 * 1000;
-// const allowedTime = 30 * 1000;
 const updateSpeed = 5 * 1000;
-const alertWhenUnder = 15 * 60 * 1000;
-const alertEvery = 5 * 60 * 1000;
+const alertWhenUnder = 67 * 60 * 1000;
+const alertEvery = 1 * 60 * 1000;
 const resetTime = false;
+const showBadge = true;
 
+// Variables
 let month = new Date().getMonth().toString();
 let day = new Date().getDate().toString();
 let year = new Date().getFullYear().toString();
 let todayString = month + "/" + day + "/" + year;
-
 let nextAlert = alertWhenUnder;
 
-let prevDate;
+
 // If it is a new day, allot more time
+let prevDate;
 chrome.storage.sync.get("date", (data) => {
 	prevDate = data.date;
 	if (todayString != prevDate) {
@@ -40,7 +42,7 @@ function update() {
          chrome.storage.sync.get("timeLeft", (data) => {
             // Send desktop notifications when time is low
             if (data.timeLeft <= alertWhenUnder && data.timeLeft > 0 && data.timeLeft <= nextAlert) {
-               chrome.runtime.sendMessage({action: {type: "notify", data: data.timeLeft / (1000 * 60)}});
+               chrome.runtime.sendMessage({action: {type: "notify", data: Math.floor(data.timeLeft / (1000 * 60))}});
                nextAlert -= alertEvery;
             }
             // Force close the tab when there is no time left
@@ -56,12 +58,15 @@ function update() {
                chrome.storage.sync.set({timeLeft: data.timeLeft - updateSpeed, date: todayString}, () => {});
             }
             // Update the badge to show remaining time
-            chrome.runtime.sendMessage({action: {type: "badge", data: data.timeLeft / (60 * 1000)}});
+            if (showBadge) {
+               chrome.runtime.sendMessage({action: {type: "badge", data: data.timeLeft / (60 * 1000)}});
+            }
          });
 
       }
    });
 
+   // Make sure that the current date is correct
 	month = new Date().getMonth().toString();
 	day = new Date().getDate().toString();
 	year = new Date().getFullYear().toString();
